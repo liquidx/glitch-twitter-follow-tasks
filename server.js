@@ -1,8 +1,8 @@
 var path = require('path'),
     express = require('express'),
-//    Promise = require('bluebird'),
     low = require('lowdb'),
     app = express(),   
+    bodyParser = require('body-parser'),    
     Twit = require('twit');
 
 var config = {
@@ -26,6 +26,8 @@ db.defaults({
   following_history: [] }).write();
 
 app.use(express.static('public'));
+app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
+
 app.get("/", function (request, response) {
   response.sendFile(__dirname + '/views/index.html');
 });
@@ -39,6 +41,13 @@ app.get('/following', function(request, response) {
 });
 
 app.post('/create_following_list', (request, response) => {
+
+  if (request.body.secret != process.env.SECRET_PARAM) {
+    response.status(403);
+    response.send('ERROR');
+    console.error('Secret: ' + request.body.secret);
+    return;
+  }
   var following = db.get('following').value();
   var following_ids = following.map((a) => { return a.screen_name });
   var following_count = following_ids.length;
@@ -77,11 +86,21 @@ app.post('/create_following_list', (request, response) => {
   
 });
 
-app.all('/run', (request, response) => {
+// Method to fetch the latest following and followers list from Twitter.
+// 
+// Stores the results in a local db (lowdb).
+app.post('/run', (request, response) => {
   var following = [];
   var followers = [];
   var per_page = 200;
   var user = process.env.ACCESS_USER;
+  
+  if (request.body.secret != process.env.SECRET_PARAM) {
+    response.status(403);
+    response.send('ERROR');
+    console.error('Secret: ' + request.body.secret);
+    return;
+  }
   
   var following_promise = new Promise((resolve, reject) => {
     var pending = [];
