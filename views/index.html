@@ -6,24 +6,35 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Roboto:300,300italic,700,700italic">
+    <link rel="stylesheet" href="//cdn.rawgit.com/necolas/normalize.css/master/normalize.css">
+    <link rel="stylesheet" href="//cdn.rawgit.com/milligram/milligram/master/dist/milligram.min.css">
     <link rel="stylesheet" href="/style.css">
   </head>
   <body>
-    <header>
-      <h1>Twitter Task - Friends List</h1>
-    </header>
+    <div class="container">
 
-    <main>
-      <form>
-        <input type="text" maxlength="100" placeholder="Dreams!">
-        <button type="submit">Submit</button>
-      </form>
-      <section class="followers">
-        <ul id="followers">
-        </ul>
-      </section>
-    </main>
+      <header>
+        <h1>Twitter Task - Friends List</h1>
+      </header>
 
+      <main>
+        <div>
+          <input type="password" name="secret" id="secret" placeholder="secret">
+          <button id="createlist">Create Following List</button>
+          <button id="run">
+            Run
+          </button>
+          <span id="result"></span>
+          
+        </div>
+
+        <table id="users"> 
+          <tr><th>User</th><th>Language</th><th>Following</th><th>Followers</th></tr>
+          
+        </table>
+      </main>
+    </div>
     <!-- Your web-app is https, so your scripts need to be too -->
     <script src="https://code.jquery.com/jquery-2.2.1.min.js"
             integrity="sha256-gvQgAFzTH6trSrAWoH1iPo9Xc96QxSZ3feW6kem+O00="
